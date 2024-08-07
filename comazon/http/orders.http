@@ -1,0 +1,48 @@
+GET http://localhost:3000/orders
+
+###
+
+GET http://localhost:3000/orders/b5f8e405-8b95-4cb2-8b3b-ee1573da4fc2
+
+###
+
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{
+  "userId": "70e1e61d-f2ae-4d7d-bf8f-d65eafdb6a45"
+}
+
+###
+
+PATCH http://localhost:3000/orders/9fde1702-08d7-407c-8e6e-65e24f6a8237
+Content-Type: application/json
+
+{
+  "status": "PENDING"
+}
+
+###
+
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{
+  "userId": "70e1e61d-f2ae-4d7d-bf8f-d65eafdb6a45",
+  "orderItems": [
+    {
+      "productId": "1e112c02-7c92-4d52-b76e-485e41e3f64d",
+      "unitPrice": 59000,
+      "quantity": 10
+    },
+    {
+      "productId": "f751e63f-686d-42d4-898e-3ef6d4137908",
+      "unitPrice": 79000,
+      "quantity": 2
+    }
+  ]
+}
+
+###
+
+DELETE http://localhost:3000/orders/9fde1702-08d7-407c-8e6e-65e24f6a8237

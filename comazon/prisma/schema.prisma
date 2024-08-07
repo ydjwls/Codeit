@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  firstName      String
+  lastName       String
+  address        String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  orders         Order[]
+  userPreference UserPreference?
+  savedProducts  Product[]
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  category    Category
+  price       Float
+  stock       Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+  savedUsers  User[]
+}
+
+model UserPreference {
+  id           String   @id @default(uuid())
+  receiveEmail Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @unique
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId     String?
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  unitPrice Float
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId String?
+}
+
+enum Category {
+  FASHION
+  BEAUTY
+  SPORTS
+  ELECTRONICS
+  HOME_INTERIOR
+  HOUSEHOLD_SUPPLIES
+  KITCHENWARE
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETE
+}

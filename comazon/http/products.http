@@ -1,0 +1,35 @@
+GET http://localhost:3000/products
+
+###
+GET http://localhost:3000/products?order=priceLowest&category=ELECTRONICS&limit=2
+
+###
+
+GET http://localhost:3000/products/1e112c02-7c92-4d52-b76e-485e41e3f64d
+
+###
+
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name": "코드잇 후디",
+  "description": "코드잇 로고가 새겨진 보라색 후디.",
+  "category": "FASHION",
+  "price": 39000,
+  "stock": 30
+}
+
+###
+
+PATCH http://localhost:3000/products/f8013040-b076-4dc4-8677-11be9a17162f
+Content-Type: application/json
+
+{
+  "price": 40000,
+  "stock": 19
+}
+
+###
+
+DELETE http://localhost:3000/products/f8013040-b076-4dc4-8677-11be9a17162f

@@ -1,0 +1,32 @@
+GET http://localhost:3000/tasks
+
+### 
+
+GET http://localhost:3000/tasks?sort=oldest&count=3
+
+###
+
+GET http://localhost:3000/tasks/10
+
+###
+
+POST http://localhost:3000/tasks
+Content-Type: application/json
+
+{
+    "title": "호텔 예약하기"
+}
+
+###
+
+PATCH http://localhost:3000/tasks/1
+Content-Type: application/json
+
+{
+    "title": "1시간 운동",
+    "description": "열심히 운동하기"
+}
+
+###
+
+DELETE http://localhost:3000/tasks/2

@@ -1,0 +1,19 @@
+{
+    "name": "express-core-features",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "src/app.js",
+    "scripts": {
+        "dev": "nodemon src/app.js"
+    },
+    "dependencies": {
+        "express": "^4.19.2",
+        "multer": "^1.4.5-lts.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.0"
+    }
+}

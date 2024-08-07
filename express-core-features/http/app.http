@@ -1,0 +1,25 @@
+POST http://localhost:3000/files
+Content-Type: multipart/form-data; boundary=Boundary01234567890123456789
+
+--Boundary01234567890123456789
+Content-Disposition: form-data; name="attachment"; filename="hello.txt"
+Content-Type: text/plain
+
+Hello!
+--Boundary01234567890123456789--
+
+### 
+
+GET http://localhost:3000/files/43b308964f1f1756238de7a2c37d074d
+
+###
+
+POST http://localhost:3000/photos
+Content-Type: multipart/form-data; boundary=Boundary01234567890123456789
+
+--Boundary01234567890123456789
+Content-Disposition: form-data; name="image"; filename="profile.txt"
+Content-Type: text/plain
+
+This is profile image.
+--Boundary01234567890123456789--
