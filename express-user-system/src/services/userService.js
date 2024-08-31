@@ -10,8 +10,11 @@ async function createUser(user) {
     throw error; 
   }
 
+  // 해싱 과정 추가 
+  const hashedPassword = await hashingPassword(user.password); 
   // 2. 이메일이 사용중이 아니라면 입력받은 유저를 데이터베이스에 저장  
-  const createdUser = await userRepository.save({ ...user });
+  // password 추가 
+  const createdUser = await userRepository.save({ ...user, password: hashedPassword });
   // 새로 가입된 유저정보를 생성된 id와 함께 반환 
   // 이때, password와 같은 유저의 민감 정보는 반환 X => filterSensitiveUserData 
   return filterSensitiveUserData(createdUser);   
@@ -38,10 +41,11 @@ async function getUser(email, password) {
   return filterSensitiveUserData(user);  
 }
 
-function verifyPassword(inputPassword, password) {
-  const isMatch = inputPassword === password;
+// 해싱된 비밀번호를 고려한 로그인 시도를 구현 
+async function verifyPassword(inputPassword, savedpassword) {
+  const isValid = await bcrypt.compare(inputPassword, savedpassword);  // 변경 
   // 일치하지 않는다면 401 Unauthorized 상태 코드와 함께 빈 리스폰스 반환 
-  if (!isMatch) {
+  if (!isValid) {
     const error = new Error('Unauthorized');
     error.code = 401;
     throw error; 
