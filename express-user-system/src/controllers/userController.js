@@ -20,7 +20,8 @@ userController.post('/login', async (req, res, next) => {
     try {
         // getUser 메소드를 실행하여 반환하는 유저 정보를 리스폰스로 돌려주기 
         const user = await userService.getUser(email, password);
-        return res.json(user);
+        const accessToken = userService.createToken(user);
+        return res.json({ accessToken });
     } catch (error) {
         next(error);
     }

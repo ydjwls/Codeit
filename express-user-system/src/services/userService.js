@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 async function createUser(user) {
   // 1. 유저가 입력받은 이메일이 사용중인지 확인 
   const existedUser = await userRepository.findByEmail(user.email);
@@ -50,6 +52,12 @@ async function verifyPassword(inputPassword, savedpassword) {
     error.code = 401;
     throw error; 
   }
+}
+
+async function createToken(user) {
+  const payload = { userId: user.id };
+  const options = { expiresIn : '1h' };
+  return jwt.sign(payload, process.env.JWY_SECRET, options);
 }
 
 export default {
