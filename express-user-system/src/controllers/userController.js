@@ -26,4 +26,17 @@ userController.post('/login', async (req, res, next) => {
     }
 });
 
+// 세션 로그인에 대한 컨트롤러 작성 
+userController.post('/session-login', async (req, res, next) => {
+    const { email, password } = req.body
+
+    try {
+        const user = await userService.getUser(email, password);
+        req.session.userId = user.id;
+        return res.json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default userController;
