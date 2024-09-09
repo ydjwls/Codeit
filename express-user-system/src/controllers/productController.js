@@ -2,9 +2,11 @@ import express from 'express';
 
 import productService from '../services/productService.js';
 
+import auth from '../middlewares/auth.js';
+
 const productController = express.Router();
 
-productController.post('/', async (req, res, next) => {
+productController.post('/', auth.verifySessionLogin, async (req, res, next) => {
   const createdProduct = await productService.create(req.body);
   return res.json(createdProduct);
 });
