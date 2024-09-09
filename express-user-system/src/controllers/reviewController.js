@@ -36,25 +36,33 @@ reviewController.get('/', async (req, res, next) => {
   }
 });
 
-reviewController.put('/:id', async (req, res, next) => {
-  try {
-    const updatedReview = await reviewService.update(
-      req.params.id,
-      req.body,
-    );
-    return res.json(updatedReview);
-  } catch (error) {
-    return next(error);
-  }
+// 리뷰 수정 
+reviewController.put('/:id', 
+  authMiddleware.verifyAccessToken,
+  authMiddleware.verifyReviewAuth,
+  async (req, res, next) => {
+    try {
+      const updatedReview = await reviewService.update(
+        req.params.id,
+        req.body,
+      );
+      return res.json(updatedReview);
+    } catch (error) {
+      return next(error);
+    }
 });
 
-reviewController.delete('/:id', async (req, res, next) => {
-  try {
-    const deletedReview = await reviewService.deleteById(req.params.id);
-    return res.json(deletedReview);
-  } catch (error) {
-    return next(error);
-  }
+// 리뷰 삭제 
+reviewController.delete('/:id', 
+  authMiddleware.verifyAccessToken,
+  authMiddleware.verifyReviewAuth,
+  async (req, res, next) => {
+    try {
+      const deletedReview = await reviewService.deleteById(req.params.id);
+      return res.json(deletedReview);
+    } catch (error) {
+      return next(error);
+    }
 });
 
 export default reviewController;
