@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import userRepository from '../repositories/userRepository';
 
 async function createUser(user) {
   // 1. 유저가 입력받은 이메일이 사용중인지 확인 
@@ -23,7 +24,7 @@ async function createUser(user) {
 }
 
 function filterSensitiveUserData(user) {
-  const { password, ...rest } = user;
+  const { password, refreshToken, ...rest } = user;
   return rest; 
 }
 
@@ -54,10 +55,27 @@ async function verifyPassword(inputPassword, savedpassword) {
   }
 }
 
+// refreshToken을 유효기간 2주로 설정하여 발급 
 async function createToken(user) {
   const payload = { userId: user.id };
-  const options = { expiresIn : '1h' };
+  const options = { 
+    expiresIn : type === 'refresh' ? '2w' : '1h',
+  };
   return jwt.sign(payload, process.env.JWY_SECRET, options);
+}
+
+async function updateUser(id, data) {
+  return await userRepository.update(id, data);
+}
+
+async function refreshToken(userId, refreshToken) {
+  const user = await userRepository.findById(userId);
+  if (!user || user.refreshToken !== refreshToken) {
+    const error = new Error('Unauthorized');
+    error.code = 401;
+    throw error;
+  }
+  return createToken(user);
 }
 
 export default {

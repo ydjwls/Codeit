@@ -8,6 +8,12 @@ const verifyAccessToken = expressjwt({
     algorithms: ['HS256'],
 });
 
+const verifyRefreshToken = expressjwt({
+    secret: process.env.JWT_SECRET, 
+    algorithms: ['HS256'],
+    getToken: (req) => req.cookies.refreshToken,
+});
+
 function throwUnauthorizedError() {
     // 인증되지 않은 경우 401 에러를 발생시키는 함수 
     const error = new Error('Unauthorized');
