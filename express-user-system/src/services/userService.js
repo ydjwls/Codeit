@@ -75,7 +75,9 @@ async function refreshToken(userId, refreshToken) {
     error.code = 401;
     throw error;
   }
-  return createToken(user);
+  const accessToken = createToken(user); // 변경
+  const newRefreshToken = createToken(user, 'refresh'); // 추가 
+  return { accessToken, newRefreshToken }; // 변경 
 }
 
 export default {
