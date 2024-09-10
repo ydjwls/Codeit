@@ -21,12 +21,12 @@ async function createUser(user) {
   // 새로 가입된 유저정보를 생성된 id와 함께 반환 
   // 이때, password와 같은 유저의 민감 정보는 반환 X => filterSensitiveUserData 
   return filterSensitiveUserData(createdUser);   
-}
+};
 
 function filterSensitiveUserData(user) {
   const { password, refreshToken, ...rest } = user;
   return rest; 
-}
+};
 
 // 로그인을 위해 이메일과 비밀번호로 유저를 찾는 메소드 정의 
 async function getUser(email, password) {
@@ -42,7 +42,7 @@ async function getUser(email, password) {
   verifyPassword(password, user.password);
   // 일치하면 찾은 유저 반환 (민감한 정보 반환 X)
   return filterSensitiveUserData(user);  
-}
+};
 
 // 해싱된 비밀번호를 고려한 로그인 시도를 구현 
 async function verifyPassword(inputPassword, savedpassword) {
@@ -53,7 +53,7 @@ async function verifyPassword(inputPassword, savedpassword) {
     error.code = 401;
     throw error; 
   }
-}
+};
 
 // refreshToken을 유효기간 2주로 설정하여 발급 
 async function createToken(user) {
@@ -62,11 +62,11 @@ async function createToken(user) {
     expiresIn : type === 'refresh' ? '2w' : '1h',
   };
   return jwt.sign(payload, process.env.JWY_SECRET, options);
-}
+};
 
 async function updateUser(id, data) {
   return await userRepository.update(id, data);
-}
+};
 
 async function refreshToken(userId, refreshToken) {
   const user = await userRepository.findById(userId);
@@ -78,9 +78,22 @@ async function refreshToken(userId, refreshToken) {
   const accessToken = createToken(user); // 변경
   const newRefreshToken = createToken(user, 'refresh'); // 추가 
   return { accessToken, newRefreshToken }; // 변경 
-}
+};
+
+async function getUserById(id) {
+  const user = await userRepository.findById(id);
+
+  if (!user) {
+    const error = new Error('Not Found');
+    error.code = 404;
+    throw error;
+  }
+
+  return filterSensitiveUserData(user);
+};
 
 export default {
   createUser,
   getUser,
+  getUserById,
 };

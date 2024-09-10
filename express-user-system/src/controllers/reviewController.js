@@ -38,9 +38,11 @@ reviewController.get('/', async (req, res, next) => {
 
 // 리뷰 수정 
 reviewController.put('/:id', 
-  authMiddleware.verifyAccessToken,
+  // authMiddleware.verifyAccessToken,
+  passport.authenticate('access-token', { session: false }), // 추가 
   authMiddleware.verifyReviewAuth,
   async (req, res, next) => {
+    const { id: userId } = req.user; // 변경 
     try {
       const updatedReview = await reviewService.update(
         req.params.id,
