@@ -1,6 +1,8 @@
 import express from 'express';
 import userService from '../services/userService.js';
 
+import passport from '../config/passport.js';
+
 const userController = express.Router();
 
 // 유저 생성인, POST 메소드에 경로는 /users
@@ -36,6 +38,8 @@ userController.post('/login', async (req, res, next) => {
 });
 
 // 세션 로그인에 대한 컨트롤러 작성 
+
+/*
 userController.post('/session-login', async (req, res, next) => {
     const { email, password } = req.body
 
@@ -46,6 +50,14 @@ userController.post('/session-login', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+});
+*/
+
+userController.post('/session-login',
+    passport.authenticate('local'),
+    async (req, res, next) => {
+      const user = req.user;
+      return res.json(user);
 });
 
 userController.post('/token/refresh',

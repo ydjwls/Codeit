@@ -10,10 +10,15 @@ import errorHandler from './middleware/errorHandler.js';
 
 import session from 'express-session';
 
+import passport from './config/passport.js';
+
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('', userController);
 app.use('/products', productController);
