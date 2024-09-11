@@ -80,4 +80,21 @@ userController.post('/token/refresh',
     }
 );
 
+userController.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+userController.get('/auth/google/callback',
+    passport.authenticate('google'),
+    (req, res, next) => {
+      const { id } = req.user;
+      const accessToken = userService.createToken(id);
+      const refreshToken = userService.createToken(id, 'refresh');
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
+      return res.json({ accessToken });
+    }
+);
+
 export default userController;

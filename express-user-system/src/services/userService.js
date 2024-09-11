@@ -92,6 +92,11 @@ async function getUserById(id) {
   return filterSensitiveUserData(user);
 };
 
+async function oauthCreateOrUpdate(provider, providerId, email, name) {
+  const user = await userRepository.createOrUpdate(provider, providerId, email, name);
+  return filterSensitiveUserData(user);
+}
+
 export default {
   createUser,
   getUser,

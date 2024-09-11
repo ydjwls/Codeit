@@ -4,8 +4,11 @@ import userRepository from '../repositories/userRepository.js';
 
 import { accessTokenStrategy } from '../middlewares/passport/jwtStrategy.js';
 
+import googleStrategy from '../middlewares/passport/googleStrategy.js';
+
 passport.use(localStrategy);
 passport.use('access-token', accessTokenStrategy);
+passport.use(googleStrategy);
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
