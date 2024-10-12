@@ -176,3 +176,37 @@ console.log(Size.S);
 console.log(Size.M);   
 console.log(Size.L);   
 console.log(Size.XL);  
+
+// interface
+interface Product {
+    id: string;
+    name: string;
+    price: number;
+    membersOnly?: boolean;
+}
+
+interface ClothingProduct extends Product {
+    sizes: Size[];
+}
+
+const product3: ClothingProduct = {
+    id: 'c001',
+    name: '코드잇 블랙 후디 집업',
+    price: 129000,
+    membersOnly: true,
+    sizes: [Size.M, Size.L],
+};
+
+const product4: Product = {
+    id: 'd001',
+    name: '코드잇 텀블러',
+    price: 35000,
+} 
+
+interface PrintProductFunction {
+    (product: Product): void;
+}
+
+const printProduct: PrintProductFunction = (product) => {
+    console.log(`${product.name}의 가격의 ${product.price}원입니다.`)
+}
