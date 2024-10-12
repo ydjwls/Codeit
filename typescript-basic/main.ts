@@ -1,3 +1,4 @@
+/** 
 // 타입 정하는 법 
 let size: number = 100;
 size = 101;
@@ -210,3 +211,183 @@ interface PrintProductFunction {
 const printProduct: PrintProductFunction = (product) => {
     console.log(`${product.name}의 가격의 ${product.price}원입니다.`)
 }
+
+// 리터럴 타입 
+let productName1 = '코드잇 블랙 후드';
+const productName2 = '코드잇 텀블러';
+
+let small = 95;
+const large = 100;
+
+function printSize(size: number) {
+    console.log(`${size} 사이즈입니다.`);
+}
+
+printSize(small);
+printSize(large);
+
+// 타입 별칭 
+type Cart = string[];
+type CartResultCallback = (result: boolean) => void;
+type Product2 = {
+    ud: string;
+    name: string;
+}
+
+const cart2: Cart = [
+    'c001',
+    'c002',
+    'c003',
+];
+
+interface User {
+    username: string;
+    email: string;
+    cart2: Cart;
+}
+
+const user: User = {
+    username: 'codeit',
+    email: 'typescript@codeit.kr',
+    cart2,
+}
+
+// Union 타입 
+enum ClothingSize {
+    S = 'S',
+    M = 'M',
+    L = 'L',
+    XL = 'XL',
+}
+
+interface Product {
+    id: string;
+    name: string;
+    price: number;
+    membersOnly?: boolean;
+}
+
+interface ClothingProduct extends Product {
+    sizes: ClothingSize[];
+    color: string;
+}
+
+type ShoeSize = 220 | 225 | 230 | 235 | 240 | 245 | 250 | 255 | 260 | 265 | 270 | 275 | 280;
+
+interface ShoeProduct extends Product {
+    sizes: ShoeSize[];
+    handmade: boolean;
+}
+
+function printSizes(product: ClothingProduct | ShoeProduct) {
+    const availableSizes = product.sizes.join(', ');
+    console.log(`구매 가능한 사이즈는 다음과 같습니다: ${availableSizes}`);
+    
+    if ('color' in product) {
+        console.log(`색상: ${product.color}`);
+    }
+
+    if ('handmade' in product) {
+        console.log(
+            product.handmade
+                ? '이 상품은 장인이 직접 만듭니다.'
+                : '이 상품은 공장에서 만들어졌습니다.'
+        );
+    }
+}
+
+const product: ClothingProduct = {
+    id: 'c001',
+    name: '코드잇 블랙 후드 집업',
+    price: 129000,
+    membersOnly: true,
+    sizes: [ClothingSize.M, ClothingSize.L],
+    color: 'black',
+}
+
+// Intersection 타입 
+interface Id {
+    id: string;
+}
+
+interface Timestamp {
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+type Product = Id & {
+    name: string;
+    price: number;
+    membersOnly?: boolean;
+}
+
+type User = Id & Timestamp & {
+    username: string;
+    email:string;
+}
+
+type Review = Id & Timestamp & {
+    productId: string; 
+    userId: string;
+    content: string;
+}
+
+// 상속하는 방법 
+interface Entity {
+    id: string;
+}
+
+interface TimestampEntity extends Entity {
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+interface Product extends Entity {
+    name: string;
+    price: number;
+    membersOnly?: boolean;
+}
+
+interface User extends TimestampEntity {
+    username: string;
+    email:string;
+}
+
+interface Review extends TimestampEntity {
+    productId: string; 
+    userId: string;
+    content: string;
+}
+*/
+// keyof 연산자  
+interface Product {
+    id: string;
+    name: string;
+    price: number;
+    salePrice: number;
+    membersOnly?: boolean;
+}
+
+// type ProductProperty = 'id' | 'name' | 'price' | 'salePrice' | 'membersOnly';
+//type ProductProperty = keyof Product;
+
+//const productTabelKeys: ProductProperty[] = ['name', 'price', 'salePrice', 'membersOnly'];
+const productTabelKeys: (keyof Product)[] = ['name', 'price', 'salePrice', 'membersOnly'];
+
+
+const product: Product = {
+    id: 'c001',
+    name: '코드잇 블랙 후드 집업',
+    price: 129000,
+    salePrice: 98000,
+    membersOnly: true,
+};
+
+for (let key of productTabelKeys) {
+    console.log(`${key} | ${product[key]}`);
+}
+
+// typeof 연산자
+let product2: typeof product;
+
+console.log(typeof product);
