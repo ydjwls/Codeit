@@ -358,7 +358,7 @@ interface Review extends TimestampEntity {
     userId: string;
     content: string;
 }
-*/
+
 // keyof 연산자  
 interface Product {
     id: string;
@@ -391,3 +391,49 @@ for (let key of productTabelKeys) {
 let product2: typeof product;
 
 console.log(typeof product);
+*/
+// 제네릭
+const shoeSizes: number[] = [230, 250, 280];
+shoeSizes.map((num) => {
+
+});
+
+const clothingSizes: string[] = ['M', 'L', 'XL'];
+clothingSizes.map((names) => {
+
+});
+
+function printArray<T>(items: T[]) {
+    for (const item of items) {
+        console.log(item);
+    }
+}
+
+printArray(shoeSizes);
+printArray(clothingSizes);
+
+interface Product {
+    id: string;
+    name: string;
+    price: number;
+    membersOnly?: boolean;
+}
+
+interface SizeProduct<T> extends Product {
+    sizes: T[];
+}
+
+enum ClothingSize {
+    S = 'S',
+    M = 'M',
+    L = 'L',
+    XL = 'XL',
+}
+
+type ClothingProduct = SizeProduct<ClothingSize>;
+
+type Pair<T> = [T, T];
+const point: Pair<number> = [1, 2];
+const fullname: Pair<string> = ['김', '코드잇'];
+
+const map = new Map<string, Product>();
