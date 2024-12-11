@@ -40,13 +40,18 @@ const app_1 = require("./app");
 const redis = __importStar(require("redis"));
 let app;
 let client;
+const REDIS_URL = "redis://default:test_env@localhost:6380";
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-    client = redis.createClient({ url: "redis://localhost:6379" });
+    client = redis.createClient({ url: REDIS_URL });
     yield client.connect();
     app = (0, app_1.createApp)(client);
 }));
 beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
     yield client.flushDb();
+}));
+afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+    yield client.flushDb();
+    yield client.quit();
 }));
 describe("POST /message", () => {
     it("responds with a success message", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,8 +64,9 @@ describe("POST /message", () => {
 });
 describe("GET /messages", () => {
     it("responds with all messages", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield client.lPush(app_1.LIST_KEY, ["msg1", "msg2"]);
         const response = yield (0, supertest_1.default)(app).get("/messages");
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual([]);
+        expect(response.body).toEqual(["msg2", "msg1"]);
     }));
 });

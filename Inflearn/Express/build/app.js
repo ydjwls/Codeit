@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createApp = void 0;
+exports.createApp = exports.LIST_KEY = void 0;
 const express_1 = __importDefault(require("express"));
-const LIST_KEY = "messages";
+exports.LIST_KEY = "messages";
 const createApp = (client) => {
     const app = (0, express_1.default)();
     app.use(express_1.default.json());
@@ -23,11 +23,11 @@ const createApp = (client) => {
     });
     app.post("/messages", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
         const { message } = request.body;
-        yield client.lPush(LIST_KEY, message);
+        yield client.lPush(exports.LIST_KEY, message);
         response.status(200).send("Message added to list");
     }));
     app.get("/messages", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-        const messages = yield client.lRange(LIST_KEY, 0, -1);
+        const messages = yield client.lRange(exports.LIST_KEY, 0, -1);
         response.status(200).send(messages);
     }));
     return app;

@@ -31,12 +31,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const redis = __importStar(require("redis"));
 const app_1 = require("./app");
-const PORT = 4000;
+const { PORT, REDIS_URL } = process.env;
+console.log({ PORT, REDIS_URL });
+// 오류 처리 
+if (!PORT)
+    throw new Error("PORT is required");
+if (!REDIS_URL)
+    throw new Error("REDIS_URL is required");
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    const client = redis.createClient({ url: "redis://localhost:6379" });
+    const client = redis.createClient({ url: REDIS_URL });
     yield client.connect();
     const app = (0, app_1.createApp)(client);
     app.listen(PORT, () => {
